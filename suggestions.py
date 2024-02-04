@@ -1,42 +1,54 @@
-import spacy
-import string
-from sentence_transformers import util
+from sentence_transformers import util, SentenceTransformer
+from typing import List, Dict, Tuple
+from spacy.tokens import Doc
+
+def calculate_similarity(
+    input_phrase: List[str], 
+    standard_terms: List[str], 
+    model: SentenceTransformer
+) -> Tuple[str, float]:
+  """
+  Calculates the cosine similarity between input_phrase and standard_terms.
+  
+  Returns a tuple of the most similar standard term and its score.
+  """
+  embeddings1 = model.encode(input_phrase, convert_to_tensor=True)
+  embeddings2 = model.encode(standard_terms, convert_to_tensor=True)
+  similarity_scores = util.pytorch_cos_sim(embeddings1, embeddings2).flatten()
+  best_id = similarity_scores.argmax()
+  return standard_terms[best_id], similarity_scores[best_id]
 
 
-def calculate_similarity(phrase1, phrase2, model):
-  embeddings1 = model.encode(phrase1, convert_to_tensor=True)
-  embeddings2 = model.encode(phrase2, convert_to_tensor=True)
-  similarity_score = util.pytorch_cos_sim(embeddings1, embeddings2).item()
-  return similarity_score
-
-
-def generate_suggestions(input_text,
-                         standardized_terms,
-                         model,
-                         nlp,
-                         threshold=0.7):
-
+def generate_suggestions(
+  input_text: str,
+  standard_terms: List[str],
+  model: SentenceTransformer,
+  nlp: Doc,
+  threshold: float = 0.45
+) -> Dict[str, List[Tuple[str, float]]]:
+  """
+  Generates replacement suggestions for input_text 
+  based on the similarity between certain phrases in this text and standard_terms.
+  
+  Returns a dictionary with the keys of the input phrases proposed for replacement 
+  and the values of the most similar standard terms with their ratings.
+  """
   doc = nlp(input_text)
-  cleared_tokens = [
-      token.text.lower() for token in doc
-      if not token.is_stop and token.is_alpha
-  ]
-  suggestions = []
-  for i in range(len(cleared_tokens)):
-    for chunk_size in range(1, min(5, len(cleared_tokens) - i)):
+  
+  suggestions = {}
+  for token in doc:
+    subtree_text = ' '.join(n.text for n in token.subtree)
+    for input_phrase in set([token.text, subtree_text]):
       # Form a chunk with varying lengths
-      input_phrase = ' '.join(cleared_tokens[j]
-                              for j in range(i, i + chunk_size))
+      best_term, similarity_score = calculate_similarity([input_phrase], standard_terms, model)
+      
+      if similarity_score > threshold:
+        if input_phrase in suggestions:
+          suggestions[input_phrase] += [(best_term, similarity_score)]
+        else:
+          suggestions.update({input_phrase: [(best_term, similarity_score)]})
 
-      for standardized_term in standardized_terms:
-        similarity_score = calculate_similarity([input_phrase],
-                                                [standardized_term], model)
-        if similarity_score > threshold:
-          suggestions.append({
-              "original_phrase": input_phrase,
-              "recommended_replacement": standardized_term,
-              "similarity_score": similarity_score
-          })
-          break
+  for key, value in suggestions.items():
+    suggestions[key] = sorted(value, key=lambda x: x[1], reverse=True)[0]
 
   return suggestions

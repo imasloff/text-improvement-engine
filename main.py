@@ -1,27 +1,54 @@
 import spacy
+from typing import Any
 from sentence_transformers import SentenceTransformer
 
 from suggestions import generate_suggestions
 
 
-def main():
-  nlp = spacy.load("en_core_web_lg")
-  
-  input_text_fname, st_terms_fname = "src/input_text.txt", "src/st_terms.csv"
-  with open(input_text_fname, "r") as input_text_file:
-    input_text = input_text_file.read()
-  with open(st_terms_fname, "r") as st_terms_file:
-    st_terms = [line.strip() for line in st_terms_file]
+def load_file(fname: str) -> Any:
+  """
+  Loads the file from src directiry, 
+  reads and return its contents,
+  deals with exceptions.
+  """
+  try:
+    with open('src/' + fname, "r") as file:
+      content = file.read()
+    return content
+  except FileNotFoundError:
+    print(f"Error: File not found at {fname}. Please check the file path.")
+    exit(1)
+  except Exception as e:
+    print(f"Error loading file at {fname}: {e}")
+    exit(1)
 
-  model = SentenceTransformer(
-      'paraphrase-MiniLM-L6-v2')  # Choose a suitable pre-trained model
-  suggestions = generate_suggestions(input_text, st_terms, model, nlp)
+def main():
+  nlp = spacy.load("en_core_web_md")
+
+  print("\nDon't forget to add your input files" +
+        "\n(one containing input text and one containing standard terms)" +
+        "\ninto the /src directory\n")
+  
+  input_text_fname = input('File with input text (e.g. input_text.txt): ')
+  standard_terms_fname = input('File with standard terms (e.g. standard_terms.csv): ')
+
+  input_text = load_file(input_text_fname)
+  standard_terms = load_file(standard_terms_fname).split('\n')
+
+  model = SentenceTransformer('all-mpnet-base-v2')
+  suggestions = generate_suggestions(input_text, standard_terms, model, nlp)
 
   print("\nSuggestions:")
-  for suggestion in suggestions:
-    print(f"""Original: '{suggestion['original_phrase']}'
-              Recommended: '{suggestion['recommended_replacement']}'
-              Similarity: {suggestion['similarity_score']:.4f}""")
+  for input_phrase, suggestion in sorted(
+    suggestions.items(),
+    key=lambda x: x[1][1],
+    reverse=True
+  ):
+    print(
+      f"\nOriginal: '{input_phrase}'\n" +
+      f"Recommended: '{suggestion[0]}'\n" +
+      f"Similarity: {suggestion[1]:.4f}"
+    )
 
 
 if __name__ == "__main__":
