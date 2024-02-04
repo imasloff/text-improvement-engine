@@ -4,6 +4,7 @@ from sentence_transformers import SentenceTransformer
 
 from suggestions import generate_suggestions
 
+STANDARD_TERMS_FNAME = "standard_terms.csv"
 
 def load_file(fname: str) -> Any:
   """
@@ -29,11 +30,13 @@ def main():
         "\n(one containing input text and one containing standard terms)" +
         "\ninto the /src directory\n")
   
-  input_text_fname = input('File with input text (e.g. input_text.txt): ')
-  standard_terms_fname = input('File with standard terms (e.g. standard_terms.csv): ')
+  # standard_terms_fname = input('File with standard terms (e.g. standard_terms.csv): ')
+  # standard_terms = load_file(standard_terms_fname)
 
+  standard_terms = load_file(STANDARD_TERMS_FNAME).split('\n')
+  
+  input_text_fname = input('Enter the name of the file containing the input text (e.g. input_text.txt): ')
   input_text = load_file(input_text_fname)
-  standard_terms = load_file(standard_terms_fname).split('\n')
 
   model = SentenceTransformer('all-mpnet-base-v2')
   suggestions = generate_suggestions(input_text, standard_terms, model, nlp)
