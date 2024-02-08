@@ -24,11 +24,11 @@ The Sentence Transformers library was selected to encode input phrases and stand
 
 Flask, a micro web framework, was chosen for its simplicity and ease of integration. The lightweight nature of Flask allows for quick development and deployment of a user interface.
 
-## Threshold Setting and Suggestions Ranking
+### Threshold Setting and Suggestions Ranking
 
 The threshold for similarity (set at 0.45) was chosen empirically to balance precision and recall. Suggestions are ranked based on similarity scores, allowing users to focus on the most relevant replacements first.
 
-## Command-Line Interface (CLI) for Quick Assessment
+### Command-Line Interface (CLI) for Quick Assessment
 
 The CLI provides a straightforward way to assess the Text Improvement Engine quickly. Users can run the CLI script, input file names, and receive instant suggestions and similarity scores.
 
