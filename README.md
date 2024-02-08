@@ -14,7 +14,7 @@ This tool analyzes input text and suggests improvements based on semantic simila
 
 ### Choice of NLP Model (Spacy)
 
-Spacy was chosen for its efficiency in tokenization and syntactic analysis. Its pre-trained English model, "en_core_web_md", provides accurate word tokenization, contributing to the semantic understanding required for the Text Improvement Engine. The version of the model can be replaced with "en_core_web_lg" for slightly better accuracy or with "en_core_web_sm" for slightly better performance.
+Spacy was chosen for its efficiency in tokenization and syntactic analysis. Its pre-trained English model, "en_core_web_md", provides accurate tokenization and dependency parsing, contributing to the semantic understanding required for the Text Improvement Engine. The version of the model can be replaced with "en_core_web_lg" for slightly better accuracy or with "en_core_web_sm" for slightly better performance.
 
 ### Embeddings for Similarity Calculation (Sentence Transformers)
 
