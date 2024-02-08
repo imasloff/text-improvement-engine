@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Improvement Engine</title>
+</head>
+
+<body>
+    <link rel="stylesheet" href="https://cdn.formbold.com/formbold.css" />
+    <br />
+    <div class="formbold-builder-form themeThree">
+        <div class="mx-auto w-full max-w-[570px] rounded-[10px] border border-stroke bg-white p-10 themeThree">
+            <div class="SortableItem fb-builder-item">
+                <h3 class="static !font-bold text-xl font-semibold leading-tight text-black sm:text-[28px]">
+                    Text Improvement Engine
+                </h3>
+            </div>
+            <div role="presentation" tabindex="0"
+                style="padding: auto; margin: auto; display: flex; flex-direction: column; align-items: space-between; justify-content: space-between;">
+                {% for suggestion in suggestions.items() %}
+                <p style="display: block; text-align: left; padding: 10px;">
+                    Original: '{{ suggestion[0] }}'<br />
+                    Recommended: '{{ suggestion[1][0] }}'<br />
+                    Similarity: '{{ suggestion[1][1] }}'
+                </p>
+                {% endfor %}
+            </div>
+            <div class="btn-toolbar flex items-center space-x-3">
+                <a href="{{ url_for('download', filename=filename) }}" download="{{ filename }}"
+                    class="inline-flex cursor-pointer items-center justify-center rounded border border-primary bg-primary px-8 py-2 text-base font-medium text-white hover:bg-opacity-90">
+                    Download JSON
+                </a>
+            </div>
+        </div>
+    </div>
+    <link rel="stylesheet" href="https://cdn.formbold.com/dropzone.css" />
+</body>
+
+</html>
