@@ -58,7 +58,7 @@ python ui.py
 ```
 
 2. Open your web browser and go to http://127.0.0.1:5000/.
-3. Input the text in the provided textarea and upload the standard terms file (in TXT or CSV format).
+3. Input the text in the provided textarea and upload the standard terms file (in TXT or CSV format), you can skip file upload to use default standard terms.
 
 ## Results Analysis
 
