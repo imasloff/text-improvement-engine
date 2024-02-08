@@ -8,6 +8,11 @@
 </head>
 
 <body>
+    <style>
+        body {
+            background: #546FA8;
+        }
+    </style>
     <link rel="stylesheet" href="https://cdn.formbold.com/formbold.css" />
     <br />
     <div class="formbold-builder-form themeThree">
@@ -29,6 +34,7 @@
             </div>
             <div class="btn-toolbar flex items-center space-x-3">
                 <a href="{{ url_for('download', filename=filename) }}" download="{{ filename }}"
+                    style="background-color: #3056a9; border-color: #3056a9;"
                     class="inline-flex cursor-pointer items-center justify-center rounded border border-primary bg-primary px-8 py-2 text-base font-medium text-white hover:bg-opacity-90">
                     Download JSON
                 </a>
