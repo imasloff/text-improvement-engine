@@ -6,9 +6,9 @@ This tool analyzes input text and suggests improvements based on semantic simila
 
 ## Technologies Used
 
-1. <em>Spacy</em>: Utilized for natural language processing (NLP) tasks, including tokenization and syntactic analysis.
-2. <em>Sentence Transformers</em>: Employed for generating contextualized embeddings of phrases, enabling semantic similarity calculations.
-3. <em>Flask</em>: Integrated into a lightweight web application for user-friendly interaction through a web interface.
+1. **Spacy**: Utilized for natural language processing (NLP) tasks, including tokenization and syntactic analysis.
+2. **Sentence Transformers**: Employed for generating contextualized embeddings of phrases, enabling semantic similarity calculations.
+3. **Flask**: Integrated into a lightweight web application for user-friendly interaction through a web interface.
 
 ## Rationale Behind Design Decisions
 
