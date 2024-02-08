@@ -4,6 +4,34 @@
 
 This tool analyzes input text and suggests improvements based on semantic similarity to a list of standard phrases. It provides both a command-line interface (CLI) and a simple web-based user interface (UI).
 
+## Technologies Used
+
+1. <em>Spacy</em>: Utilized for natural language processing (NLP) tasks, including tokenization and syntactic analysis.
+2. <em>Sentence Transformers</em>: Employed for generating contextualized embeddings of phrases, enabling semantic similarity calculations.
+3. <em>Flask</em>: Integrated into a lightweight web application for user-friendly interaction through a web interface.
+
+## Rationale Behind Design Decisions
+
+### Choice of NLP Model (Spacy)
+
+Spacy was chosen for its efficiency in tokenization and syntactic analysis. Its pre-trained English model, "en_core_web_md", provides accurate word tokenization, contributing to the semantic understanding required for the Text Improvement Engine. The version of the model can be replaced with "en_core_web_lg" for slightly better accuracy or with "en_core_web_sm" for slightly better performance.
+
+### Embeddings for Similarity Calculation (Sentence Transformers)
+
+The Sentence Transformers library was selected to encode input phrases and standard terms into embeddings. This choice was motivated by its ability to capture contextual information, enhancing the semantic similarity calculations crucial for suggesting suitable replacements.
+
+### User Interface (Flask)
+
+Flask, a micro web framework, was chosen for its simplicity and ease of integration. The lightweight nature of Flask allows for quick development and deployment of a user interface.
+
+## Threshold Setting and Suggestions Ranking
+
+The threshold for similarity (set at 0.45) was chosen empirically to balance precision and recall. Suggestions are ranked based on similarity scores, allowing users to focus on the most relevant replacements first.
+
+## Command-Line Interface (CLI) for Quick Assessment
+
+The CLI provides a straightforward way to assess the Text Improvement Engine quickly. Users can run the CLI script, input file names, and receive instant suggestions and similarity scores.
+
 ## Project Structure
 
 ```plaintext
