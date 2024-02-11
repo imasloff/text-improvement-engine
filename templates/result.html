@@ -19,16 +19,16 @@
         <div class="mx-auto w-full max-w-[570px] rounded-[10px] border border-stroke bg-white p-10 themeThree">
             <div class="SortableItem fb-builder-item">
                 <h3 class="static !font-bold text-xl font-semibold leading-tight text-black sm:text-[28px]">
-                    Text Improvement Engine
+                    Replacement Suggestions
                 </h3>
             </div>
             <div role="presentation" tabindex="0"
-                style="padding: auto; margin: auto; display: flex; flex-direction: column; align-items: space-between; justify-content: space-between;">
+                style="margin: 20px auto 20px auto; display: flex; flex-direction: column; align-items: space-between; justify-content: space-between;">
                 {% for suggestion in suggestions.items() %}
                 <p style="display: block; text-align: left; padding: 10px;">
-                    Original: '{{ suggestion[0] }}'<br />
-                    Recommended: '{{ suggestion[1][0] }}'<br />
-                    Similarity: '{{ suggestion[1][1] }}'
+                    <b>Original:</b> '{{ suggestion[0] }}'<br />
+                    <b>Recommended:</b> '{{ suggestion[1][0] }}'<br />
+                    <b>Similarity:</b> '{{ suggestion[1][1] }}'
                 </p>
                 {% endfor %}
             </div>

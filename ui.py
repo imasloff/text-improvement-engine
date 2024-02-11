@@ -59,7 +59,7 @@ def result():
     else:
         fname = 'suggestions.json'
         output_path = os.path.join('output', fname)
-        output_file = json.dump(suggestions, open(output_path, "w"), indent=4)
+        output_file = json.dump(suggestions, open(output_path, "w", encoding="utf-8"), indent=4)
     return render_template("result.html", suggestions=suggestions, filename=fname)
 
 

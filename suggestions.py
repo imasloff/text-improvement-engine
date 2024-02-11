@@ -1,3 +1,4 @@
+import numpy as np
 from sentence_transformers import util, SentenceTransformer
 from typing import List, Dict, Tuple
 from spacy.tokens import Doc
@@ -11,10 +12,8 @@ def calculate_similarity(input_phrases: List[str], standard_terms: List[str], mo
     """
     input_embeddings = model.encode(input_phrases, convert_to_tensor=True)
     standard_embeddings = model.encode(standard_terms, convert_to_tensor=True)
-    similarity_scores = util.pytorch_cos_sim(
-        input_embeddings, standard_embeddings).flatten()
-    most_similar_index = similarity_scores.argmax()
-    return standard_terms[most_similar_index], round(similarity_scores[most_similar_index].item(), 4)
+    similarity_scores = util.pytorch_cos_sim(input_embeddings, standard_embeddings).cpu().numpy()
+    return similarity_scores
 
 
 def generate_suggestions(
@@ -33,18 +32,24 @@ def generate_suggestions(
     """
     doc = nlp(input_text)
 
-    suggestions = {}
+    input_phrases = set()
     for token in doc:
         subtree_text = ' '.join(n.text for n in token.subtree)
-        phrases_to_check = set([token.text, subtree_text])
-        for input_phrase in phrases_to_check:
-            best_term, similarity_score = calculate_similarity(
-                [input_phrase], standard_terms, model)
-            if similarity_score > threshold:
-                if input_phrase in suggestions:
-                    suggestions[input_phrase] = max(
-                        suggestions[input_phrase], (best_term, similarity_score), key=lambda x: x[1])
-                else:
-                    suggestions[input_phrase] = (best_term, similarity_score)
+        input_phrases.add(token.text)
+        input_phrases.add(subtree_text)
+
+    similarity_scores = calculate_similarity(list(input_phrases), standard_terms, model)
+    
+    suggestions = {}
+    for input_phrase, scores in zip(input_phrases, similarity_scores):
+        above_threshold = np.where(scores > threshold)[0]
+        for index in above_threshold:
+            best_term = standard_terms[index]
+            best_suggestion = (best_term, round(np.float64(scores[index]), 4))
+            suggestions[input_phrase] = max(
+                suggestions.get(input_phrase, best_suggestion),
+                best_suggestion,
+                key=lambda x: x[1]
+            )
 
     return suggestions
