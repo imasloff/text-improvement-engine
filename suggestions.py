@@ -38,6 +38,8 @@ def generate_suggestions(
         input_phrases.add(token.text.lower())
         input_phrases.add(subtree_text)
 
+    standard_terms = [term.lower() for term in standard_terms]
+
     similarity_scores = calculate_similarity(list(input_phrases), standard_terms, model)
     
     suggestions = {}
