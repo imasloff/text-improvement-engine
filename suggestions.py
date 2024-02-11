@@ -34,8 +34,8 @@ def generate_suggestions(
 
     input_phrases = set()
     for token in doc:
-        subtree_text = ' '.join(n.text for n in token.subtree)
-        input_phrases.add(token.text)
+        subtree_text = ' '.join(n.text.lower() for n in token.subtree)
+        input_phrases.add(token.text.lower())
         input_phrases.add(subtree_text)
 
     similarity_scores = calculate_similarity(list(input_phrases), standard_terms, model)
