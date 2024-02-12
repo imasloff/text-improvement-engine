@@ -8,7 +8,7 @@ def calculate_similarity(input_phrases: List[str], standard_terms: List[str], mo
     """
     Calculates the cosine similarity between input_phrases and standard_terms.
 
-    Returns a tuple of the most similar standard term and its score.
+    Returns a numpy array containing the similarity scores.
     """
     input_embeddings = model.encode(input_phrases, convert_to_tensor=True)
     standard_embeddings = model.encode(standard_terms, convert_to_tensor=True)
